@@ -1,9 +1,6 @@
 import Head from 'next/head'
 import react from 'react'
 
-// 1. import `ChakraProvider` component
-import { ChakraProvider } from "@chakra-ui/react"
-
 export default function Home() {
   return (
     <div className="container">
