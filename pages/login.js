@@ -16,12 +16,12 @@ export async function getServerSideProps(context) {
   const csrfToken = await getCsrfToken(context);
   const providers = await getProviders(context);
 
-  if (session && res && session.accessToken) {
+  if (session && res) {
     res.writeHead(302, {
       Location: "/",
     });
     res.end();
-    return;
+    return { props: {} };
   }
 
   return {
