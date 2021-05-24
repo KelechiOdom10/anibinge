@@ -15,6 +15,7 @@ export default (req, res) =>
     },
     jwt: {
       secret: process.env.JWT_SECRET,
+      encryption: true,
     },
     pages: { signIn: "/login" },
     providers: [
@@ -45,12 +46,12 @@ export default (req, res) =>
           try {
             const user = await prisma.user.findUnique({ where: { email } });
             if (!user) {
-              throw new Error('User does not exist')
+              throw new Error("User does not exist");
             }
 
             const isValid = await bcrypt.compare(password, user.password);
             if (!isValid) {
-              throw new Error('Invalid credentials')
+              throw new Error("Invalid credentials");
             }
 
             return {
