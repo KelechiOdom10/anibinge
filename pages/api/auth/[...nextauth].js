@@ -53,11 +53,11 @@ export default (req, res) =>
               throw new Error('Invalid credentials')
             }
 
-            return Promise.resolve({
+            return {
               email: user.email,
               name: user.name,
               image: user.image,
-            });
+            };
           } catch (error) {
             throw new Error(error.message);
           }
