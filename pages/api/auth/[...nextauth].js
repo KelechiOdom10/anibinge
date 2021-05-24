@@ -30,9 +30,38 @@ export default (req, res) =>
         clientId: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       }),
-      Providers.Email({
-        server: `smtp://${process.env.SMTP_USER}:${process.env.SMTP_PASSWORD}@${process.env.SMTP_HOST}:587`,
-        from: process.env.SMTP_FROM,
+      Providers.Credentials({
+        name: "Credentials",
+        credentials: {
+          email: {
+            label: "Username",
+            type: "email",
+            placeholder: "Enter Email Address",
+          },
+          password: { label: "Password", type: "password" },
+        },
+        async authorize(credentials) {
+          const { email, password } = credentials;
+          try {
+            const user = await prisma.user.findUnique({ where: { email } });
+            if (!user) {
+              throw new Error('User does not exist')
+            }
+
+            const isValid = await bcrypt.compare(password, user.password);
+            if (!isValid) {
+              throw new Error('Invalid credentials')
+            }
+
+            return Promise.resolve({
+              email: user.email,
+              name: user.name,
+              image: user.image,
+            });
+          } catch (error) {
+            throw new Error(error.message);
+          }
+        },
       }),
     ],
   });
