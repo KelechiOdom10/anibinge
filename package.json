@@ -18,7 +18,8 @@
     "next-auth": "^3.23.3",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "react-icons": "^4.2.0"
+    "react-icons": "^4.2.0",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "prisma": "^2.23.0"
