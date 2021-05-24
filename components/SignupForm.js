@@ -30,16 +30,55 @@ const icons = {
   twitter: <AiOutlineTwitter />,
 };
 
-export default function LoginForm({ providers, token }) {
+export default function SignupForm({ providers, token }) {
   const [values, setValues] = useState({
+    username: "",
     email: "",
     password: "",
   });
-  const { email, password } = values;
+  const { username, email, password } = values;
   const [show, setShow] = useState(false);
-  const router = useRouter();
   const toast = useToast();
+  const router = useRouter();
 
+  const signup = async payload => {
+    const res = await fetch("/api/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...payload }),
+    });
+
+    const { status, message } = await res.json();
+
+    if (status === "error") {
+      toast({
+        title: "Error",
+        variant: "left-accent",
+        position: "top-right",
+        description: message,
+        status: "error",
+        isClosable: true,
+        duration: 4000,
+      });
+      return;
+    }
+
+    if (status === "success") {
+      toast({
+        title: "Account created.",
+        variant: "left-accent",
+        position: "top-right",
+        description: "We've created your account for you.",
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
+
+      router.push("/login");
+    }
+  };
   const toggle = e => {
     setShow(!show);
   };
@@ -48,27 +87,9 @@ export default function LoginForm({ providers, token }) {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-    
-    if (result.error) {
-      toast({
-        title: "Error",
-        variant: "left-accent",
-        position: "top-right",
-        description: result.error,
-        status: "error",
-        isClosable: true,
-        duration: 4000,
-      });
-    } else {
-      router.push("/");
-    }
+    signup({ username, email, password });
   };
 
   return (
@@ -81,11 +102,21 @@ export default function LoginForm({ providers, token }) {
           marginTop={2}
           fontWeight="medium"
         >
-          Welcome Back!
+          Get Started
         </Text>
 
         <Stack spacing={6}>
-          <Input name="csrfToken" type="hidden" defaultValue={token} />
+          <FormControl id="username" isRequired>
+            <FormLabel fontSize={{ base: "sm", md: "md" }}>Username</FormLabel>
+            <Input
+              type="text"
+              name="username"
+              value={username}
+              onChange={handleChange}
+              placeholder="Enter your username"
+              fontSize={{ base: "sm", md: "md" }}
+            />
+          </FormControl>
           <FormControl id="email" isRequired>
             <FormLabel fontSize={{ base: "sm", md: "md" }}>
               Email address
@@ -121,13 +152,15 @@ export default function LoginForm({ providers, token }) {
               </InputRightElement>
             </InputGroup>
           </FormControl>
-          <Button type="submit">Sign In</Button>
+          <Button type="submit" w="full">
+            Sign Up
+          </Button>
         </Stack>
         <Box>
           <Text fontSize={{ base: "sm", md: "md" }}>
-            Don't have an account?{" "}
-            <Link color="blue.500" fontWeight="bold" href="/signup">
-              Sign Up
+            Already have an account?{" "}
+            <Link color="blue.500" fontWeight="bold" href="/login">
+              Sign In
             </Link>
           </Text>
         </Box>
@@ -152,7 +185,7 @@ export default function LoginForm({ providers, token }) {
               })
             }
           >
-            Sign in with {provider.name}
+            Sign Up with {provider.name}
           </Button>
         );
       })}

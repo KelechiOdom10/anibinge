@@ -37,9 +37,16 @@ export default function Navbar() {
       <Heading>Anibinge</Heading>
 
       {!session ? (
-        <Button colorScheme="blue" onClick={signIn}>
-          Login / Sign up
-        </Button>
+        <Flex align="center">
+          <MenuItem to="/login">
+            <Button colorScheme="blue" variant="ghost">
+              Login
+            </Button>
+          </MenuItem>
+          <MenuItem to="/signup" isLast>
+            <Button colorScheme="blue">Sign up</Button>
+          </MenuItem>
+        </Flex>
       ) : (
         <Flex align="center">
           <Avatar
