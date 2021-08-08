@@ -2,7 +2,8 @@
   anibinge
 </h1>
 
-This is an **ongoing** social cataloguing app for users to score and track anime and manga.
+This is an **ongoing** social cataloguing app for users to score and track anime and manga, built using [Next.js](https://nextjs.org/), and bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
 
 Was put on hold due to apprenticeship commitments, however - development has resumed!
 
