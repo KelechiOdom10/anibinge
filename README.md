@@ -6,6 +6,8 @@ This is an **ongoing** social cataloguing app for users to score and track anime
 
 Was put on hold due to apprenticeship commitments, however - development has resumed!
 
+This project is still in early stages of development, so If you notice any areas of improvements in this repo, do reach out to us!
+
 ## Prerequisites
 
 You will need [Node.js](https://nodejs.org/) version 8.0 or greater installed on your system.
