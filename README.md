@@ -36,12 +36,9 @@ The app should now be up and running at [http://localhost:3000](http://localhost
 ### Used Dependencies
 
 - NextJS
-- Tailwind CSS
+- Chakra UI
 - MongoDB
-- Bcrypt
 - Next-Auth
-- Hero Icons
-- Redux
 
 ## License
 
