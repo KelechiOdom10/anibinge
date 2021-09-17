@@ -1,4 +1,4 @@
-import { Heading, Text } from "@chakra-ui/react";
+import { Text } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 
 export default function IndexPage() {

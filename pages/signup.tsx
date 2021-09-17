@@ -1,8 +1,9 @@
 import { Box } from "@chakra-ui/react";
 import SignupForm from "../components/SignupForm";
 import { getProviders, getSession } from "next-auth/client";
+import { GetServerSideProps } from "next";
 
-export default function loginPage({ providers, csrfToken }) {
+export default function loginPage({ providers }) {
   return (
     <Box w="50%" mx="auto">
       <SignupForm providers={providers} />
@@ -10,10 +11,10 @@ export default function loginPage({ providers, csrfToken }) {
   );
 }
 
-export async function getServerSideProps(context) {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const { req, res } = context;
   const session = await getSession({ req });
-  const providers = await getProviders(context);
+  const providers = await getProviders();
 
   if (session && res) {
     res.writeHead(302, {
@@ -26,4 +27,4 @@ export async function getServerSideProps(context) {
   return {
     props: { providers },
   };
-}
+};

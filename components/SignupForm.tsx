@@ -23,6 +23,7 @@ import {
 import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/router";
 import FormDivider from "./FormDivider";
+import { AppProviders } from "next-auth/providers";
 
 const icons = {
   github: <AiFillGithub />,
@@ -30,45 +31,64 @@ const icons = {
   twitter: <AiOutlineTwitter />,
 };
 
-export default function LoginForm({ providers, token }) {
+export default function SignupForm({ providers }: { providers: AppProviders }) {
   const [values, setValues] = useState({
+    username: "",
     email: "",
     password: "",
   });
-  const { email, password } = values;
+  const { username, email, password } = values;
   const [show, setShow] = useState(false);
-  const router = useRouter();
   const toast = useToast();
+  const router = useRouter();
 
-  const toggle = e => {
-    setShow(!show);
-  };
-
-  const handleChange = e => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async e => {
-    e.preventDefault();
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
+  const signup = async (payload) => {
+    const res = await fetch("/api/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...payload }),
     });
-    
-    if (result.error) {
+
+    const { status, message } = await res.json();
+
+    if (status === "error") {
       toast({
         title: "Error",
-        variant: "left-accent",
         position: "top-right",
-        description: result.error,
+        description: message,
         status: "error",
         isClosable: true,
         duration: 4000,
       });
-    } else {
-      router.push("/");
+      return;
     }
+
+    if (status === "success") {
+      toast({
+        title: "Account created.",
+        position: "top-right",
+        description: "We've created your account for you.",
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
+
+      router.push("/login");
+    }
+  };
+  const toggle = (e) => {
+    setShow(!show);
+  };
+
+  const handleChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    signup({ username, email, password });
   };
 
   return (
@@ -81,11 +101,21 @@ export default function LoginForm({ providers, token }) {
           marginTop={2}
           fontWeight="medium"
         >
-          Welcome Back!
+          Get Started
         </Text>
 
         <Stack spacing={6}>
-          <Input name="csrfToken" type="hidden" defaultValue={token} />
+          <FormControl id="username" isRequired>
+            <FormLabel fontSize={{ base: "sm", md: "md" }}>Username</FormLabel>
+            <Input
+              type="text"
+              name="username"
+              value={username}
+              onChange={handleChange}
+              placeholder="Enter your username"
+              fontSize={{ base: "sm", md: "md" }}
+            />
+          </FormControl>
           <FormControl id="email" isRequired>
             <FormLabel fontSize={{ base: "sm", md: "md" }}>
               Email address
@@ -113,6 +143,7 @@ export default function LoginForm({ providers, token }) {
               />
               <InputRightElement width="3rem">
                 <IconButton
+                  aria-label="Toggle Password visibility"
                   h="1.75rem"
                   onClick={toggle}
                   colorScheme="gray"
@@ -121,19 +152,21 @@ export default function LoginForm({ providers, token }) {
               </InputRightElement>
             </InputGroup>
           </FormControl>
-          <Button type="submit">Sign In</Button>
+          <Button type="submit" w="full">
+            Sign Up
+          </Button>
         </Stack>
         <Box>
           <Text fontSize={{ base: "sm", md: "md" }}>
-            Don't have an account?{" "}
-            <Link color="blue.500" fontWeight="bold" href="/signup">
-              Sign Up
+            Already have an account?{" "}
+            <Link color="blue.500" fontWeight="bold" href="/login">
+              Sign In
             </Link>
           </Text>
         </Box>
       </form>
       <FormDivider text="or" />
-      {Object.values(providers).map(provider => {
+      {Object.values(providers).map((provider) => {
         if (provider.name === "Credentials") {
           return;
         }
@@ -152,7 +185,7 @@ export default function LoginForm({ providers, token }) {
               })
             }
           >
-            Sign in with {provider.name}
+            Sign Up with {provider.name}
           </Button>
         );
       })}

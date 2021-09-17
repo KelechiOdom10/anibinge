@@ -1,11 +1,12 @@
 import bcrypt from "bcrypt";
 import prisma from "../../lib/db";
 import { registerSchema, validation } from "../../utils/validator";
-import { AvatarGenerator } from 'random-avatar-generator';
+import { AvatarGenerator } from "random-avatar-generator";
+import { NextApiRequest, NextApiResponse } from "next";
 
 const generator = new AvatarGenerator();
 
-const handler = async (req, res) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method == "POST") {
     const { username, email, password } = req.body;
     const image = generator.generateRandomAvatar();
@@ -46,7 +47,7 @@ const handler = async (req, res) => {
         message: "Account successfully created!",
       });
     } catch (error) {
-      res.status("401").json({
+      res.status(401).json({
         status: "error",
       });
     }
