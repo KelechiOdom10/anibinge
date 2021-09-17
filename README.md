@@ -4,7 +4,6 @@
 
 This is an **ongoing** social cataloguing app for users to score and track anime and manga, being built using [Next.js](https://nextjs.org/), and bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-
 Was put on hold due to apprenticeship commitments, however - development has resumed!
 
 This project is still in early stages of development, so If you notice any areas of improvements in this repo, do reach out to us!
@@ -38,9 +37,10 @@ The app should now be up and running at [http://localhost:3000](http://localhost
 
 ### Used Dependencies
 
-- NextJS
+- NextJS (TypeScript)
 - Chakra UI
-- MongoDB
+- PostgreSQL
+- Prisma
 - Next-Auth
 
 ## License
